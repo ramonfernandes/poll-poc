@@ -1,4 +1,4 @@
-package com.ramonfernandes.pollapp;
+package com.ramonfernandes.pollapp.poll;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
