@@ -1,4 +1,4 @@
-package com.ramonfernandes.pollapp.api;
+package com.ramonfernandes.pollapp.api.poll;
 
 import com.ramonfernandes.pollapp.domain.poll.PollEntity;
 import org.modelmapper.ModelMapper;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class Mapper {
+public class PollMapper {
 
     @Autowired
     private ModelMapper mapper;
@@ -23,8 +23,8 @@ public class Mapper {
         return mapper.map(response, PollResponse.class);
     }
 
-    public List<PollResponse> toResponse(Iterable<PollEntity> all) {
-        return mapper.map(all, new TypeToken<List<PollResponse>>() {
+    public List<PollResponse> toResponse(Iterable<PollEntity> entityList) {
+        return mapper.map(entityList, new TypeToken<List<PollResponse>>() {
         }.getType());
     }
 }

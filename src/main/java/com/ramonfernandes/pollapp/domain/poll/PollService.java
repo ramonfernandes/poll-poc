@@ -10,23 +10,23 @@ import java.util.UUID;
 public class PollService {
 
     @Autowired
-    private PollRepository repository;
+    private PollRepository pollRepository;
 
     public Iterable<PollEntity> findAll() {
-        return repository.findAll();
+        return pollRepository.findAll();
     }
 
     public PollEntity findById(UUID pollId) throws ChangeSetPersister.NotFoundException {
-        return repository.findById(pollId)
+        return pollRepository.findById(pollId)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
     public PollEntity save(PollEntity pollEntity) {
-        return repository.save(pollEntity);
+        return pollRepository.save(pollEntity);
     }
 
     public UUID delete(UUID pollId) {
-        repository.deleteById(pollId);
+        pollRepository.deleteById(pollId);
         return pollId;
     }
 }

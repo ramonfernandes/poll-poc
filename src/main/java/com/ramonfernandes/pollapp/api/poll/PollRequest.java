@@ -1,4 +1,4 @@
-package com.ramonfernandes.pollapp.api;
+package com.ramonfernandes.pollapp.api.poll;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
