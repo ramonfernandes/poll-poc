@@ -1,4 +1,4 @@
-package com.ramonfernandes.pollapp.poll;
+package com.ramonfernandes.pollapp.domain.poll;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
