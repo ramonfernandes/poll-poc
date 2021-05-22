@@ -11,6 +11,7 @@ CREATE TABLE user_table (
 );
 
 CREATE TABLE voting_table (
+    vote_id uuid PRIMARY key,
     user_id uuid,
     poll_id uuid,
     is_yes boolean,
