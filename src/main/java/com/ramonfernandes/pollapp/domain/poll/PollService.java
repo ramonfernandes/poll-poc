@@ -1,17 +1,16 @@
 package com.ramonfernandes.pollapp.domain.poll;
 
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_CLOSE_RK;
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_EXCHANGE;
-
+import com.ramonfernandes.pollapp.api.vote.VoteService;
 import com.ramonfernandes.pollapp.domain.rabbit.RabbitService;
-
-import java.nio.charset.StandardCharsets;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+
+import static com.ramonfernandes.pollapp.RabbitConfig.POLL_CLOSE_RK;
+import static com.ramonfernandes.pollapp.RabbitConfig.POLL_EXCHANGE;
 
 @Service
 public class PollService {
@@ -21,6 +20,9 @@ public class PollService {
 
     @Autowired
     private RabbitService rabbitService;
+
+    @Autowired
+    private VoteService voteService;
 
     public Iterable<PollEntity> findAll() {
         return pollRepository.findAll();
@@ -46,5 +48,19 @@ public class PollService {
     public UUID delete(UUID pollId) {
         pollRepository.deleteById(pollId);
         return pollId;
+    }
+
+    public void closePoll(UUID pollId) {
+        try {
+            PollEntity poll = pollRepository.findById(pollId)
+                    .orElseThrow(ChangeSetPersister.NotFoundException::new);
+
+            poll.set_open(false);
+
+            pollRepository.save(poll);
+            voteService.notifyResult(poll);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            System.out.println("Poll not found");
+        }
     }
 }

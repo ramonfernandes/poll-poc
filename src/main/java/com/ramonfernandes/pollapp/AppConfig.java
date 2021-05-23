@@ -1,26 +1,21 @@
 package com.ramonfernandes.pollapp;
 
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_CLOSE_QUEUE;
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_CLOSE_RK;
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_EXCHANGE;
-
-import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.ramonfernandes.pollapp.api.poll.PollMapper;
-import com.ramonfernandes.pollapp.api.user.UserMapper;
 import com.ramonfernandes.pollapp.api.vote.VoteMapper;
 import com.ramonfernandes.pollapp.domain.rabbit.RabbitService;
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-import org.modelmapper.ModelMapper;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.Channel;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import static com.ramonfernandes.pollapp.RabbitConfig.*;
 
 @Configuration
 public class AppConfig {
@@ -33,11 +28,6 @@ public class AppConfig {
     @Bean
     public PollMapper pollMapper() {
         return new PollMapper();
-    }
-
-    @Bean
-    public UserMapper userMapper() {
-        return new UserMapper();
     }
 
     @Bean
@@ -56,8 +46,12 @@ public class AppConfig {
         args.put("x-delayed-type", "direct");
 
         channel.exchangeDeclare(POLL_EXCHANGE, "x-delayed-message", true, false, args);
+
         channel.queueDeclare(POLL_CLOSE_QUEUE, true, false, false, new HashMap<>());
         channel.queueBind(POLL_CLOSE_QUEUE, POLL_EXCHANGE, POLL_CLOSE_RK);
+
+        channel.queueDeclare(NOTIFY_RESULT_QUEUE, true, false, false, new HashMap<>());
+        channel.queueBind(NOTIFY_RESULT_QUEUE, POLL_EXCHANGE, NOTIFY_RESULT_RK);
 
         return channel;
     }

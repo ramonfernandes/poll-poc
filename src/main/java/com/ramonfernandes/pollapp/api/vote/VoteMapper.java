@@ -29,10 +29,10 @@ public class VoteMapper {
         }.getType());
     }
 
-    public VoteEntity buildEntity(UUID userId, UUID pollId, boolean vote) {
+    public VoteEntity buildEntity(UUID pollId, String cpf, boolean vote) {
         return VoteEntity.builder()
-                .userId(userId)
                 .pollId(pollId)
+                .cpf(cpf)
                 .is_yes(vote)
                 .build();
     }

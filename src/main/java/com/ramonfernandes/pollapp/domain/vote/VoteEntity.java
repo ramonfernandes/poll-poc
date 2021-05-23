@@ -22,8 +22,8 @@ public class VoteEntity {
     @Column(name = "poll_id")
     private UUID pollId;
 
-    @Column(name = "user_id")
-    private UUID userId;
+    @Column(name = "cpf")
+    private String cpf;
 
     @Column(name = "is_yes")
     private boolean is_yes;

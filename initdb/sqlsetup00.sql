@@ -1,20 +1,14 @@
 CREATE TABLE poll_table (
    poll_id uuid PRIMARY key,
-   title varchar(20),
+   title varchar(50),
    description varchar(255),
    is_open boolean
 );
 
-CREATE TABLE user_table (
-   user_id uuid PRIMARY key,
-   name varchar(20)
-);
-
 CREATE TABLE voting_table (
     vote_id uuid PRIMARY key,
-    user_id uuid,
+    cpf varchar(11),
     poll_id uuid,
     is_yes boolean,
-	FOREIGN KEY (poll_id) REFERENCES poll_table (poll_id),
-	FOREIGN KEY (user_id) REFERENCES user_table (user_id)
+	FOREIGN KEY (poll_id) REFERENCES poll_table (poll_id)
 )
