@@ -1,6 +1,7 @@
 package com.ramonfernandes.pollapp.api.vote;
 
 import com.ramonfernandes.pollapp.api.poll.PollResponse;
+import com.ramonfernandes.pollapp.domain.poll.PollService;
 import com.ramonfernandes.pollapp.domain.vote.VoteEntity;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -14,16 +15,6 @@ public class VoteMapper {
     @Autowired
     private ModelMapper mapper;
 
-    public VoteEntity toEntity(VoteRequest request) {
-        VoteEntity entity = mapper.map(request, VoteEntity.class);
-
-        return entity;
-    }
-
-    public VoteResponse toResponse(VoteEntity response) {
-        return mapper.map(response, VoteResponse.class);
-    }
-
     public List<VoteResponse> toResponse(Iterable<VoteEntity> entityList) {
         return mapper.map(entityList, new TypeToken<List<PollResponse>>() {
         }.getType());
@@ -35,5 +26,9 @@ public class VoteMapper {
                 .cpf(cpf)
                 .is_yes(vote)
                 .build();
+    }
+
+    public VoteResponse toResponse(VoteEntity vote) {
+        return mapper.map(vote, VoteResponse.class);
     }
 }

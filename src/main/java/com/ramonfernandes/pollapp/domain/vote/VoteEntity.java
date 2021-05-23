@@ -1,8 +1,6 @@
 package com.ramonfernandes.pollapp.domain.vote;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -12,6 +10,8 @@ import java.util.UUID;
 @Entity
 @Builder
 @Table(name = "voting_table")
+@AllArgsConstructor
+@NoArgsConstructor
 public class VoteEntity {
 
     @Id

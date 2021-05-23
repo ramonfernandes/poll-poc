@@ -1,13 +1,15 @@
-package com.ramonfernandes.pollapp.domain.rabbit;
+package com.ramonfernandes.pollapp.domain.poll;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.UUID;
 
 @Builder
+@Getter
 @ToString
-public class PollResultMessageBody {
+public class PollResult {
 
     private UUID pollId;
     private String title;

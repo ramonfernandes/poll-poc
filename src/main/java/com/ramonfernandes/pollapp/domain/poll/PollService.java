@@ -2,15 +2,16 @@ package com.ramonfernandes.pollapp.domain.poll;
 
 import com.ramonfernandes.pollapp.api.vote.VoteService;
 import com.ramonfernandes.pollapp.domain.rabbit.RabbitService;
+import com.ramonfernandes.pollapp.domain.vote.VoteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_CLOSE_RK;
-import static com.ramonfernandes.pollapp.RabbitConfig.POLL_EXCHANGE;
+import static com.ramonfernandes.pollapp.RabbitConfig.*;
 
 @Service
 public class PollService {
@@ -58,9 +59,35 @@ public class PollService {
             poll.set_open(false);
 
             pollRepository.save(poll);
-            voteService.notifyResult(poll);
+            notifyResult(poll);
         } catch (ChangeSetPersister.NotFoundException e) {
             System.out.println("Poll not found");
         }
     }
+
+    public void notifyResult(PollEntity pollEntity) {
+        PollResult messageBody = getPollResult(pollEntity);
+
+        rabbitService.sendMessage(POLL_EXCHANGE, NOTIFY_RESULT_RK, messageBody.toString().getBytes(StandardCharsets.UTF_8), 0);
+    }
+
+    public PollResult getPollResult(UUID pollId) throws ChangeSetPersister.NotFoundException {
+        PollEntity entity = findById(pollId);
+        return getPollResult(entity);
+    }
+
+    private PollResult getPollResult(PollEntity pollEntity) {
+        List<VoteEntity> votes = voteService.findAllByPollId(pollEntity.getPollId());
+        int yesses = (int) votes.stream()
+                .filter(VoteEntity::is_yes).count();
+
+        return PollResult.builder()
+                .pollId(pollEntity.getPollId())
+                .description(pollEntity.getDescription())
+                .title(pollEntity.getTitle())
+                .yes(yesses)
+                .no(votes.size() - yesses)
+                .build();
+    }
+
 }
