@@ -37,7 +37,7 @@ public class PollController {
 
     @PostMapping("/create")
     public ResponseEntity<PollResponse> createPoll(@RequestBody PollRequest request) {
-        return ResponseEntity.ok(mapper.toResponse(service.createPoll(mapper.toEntity(request))));
+        return ResponseEntity.ok(mapper.toResponse(service.createPoll(mapper.toEntity(request), request.getSecondsToClose())));
     }
 
     @DeleteMapping("/delete/{pollId}")

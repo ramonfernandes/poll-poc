@@ -9,14 +9,11 @@ services:
       - "15432:5432"
     volumes:
       - ./initdb/sqlsetup00.sql:/docker-entrypoint-initdb.d/sqlsetup00.sql
-  rabbitmq:
-    image: rabbitmq:3-management
-    hostname: poll-rabbit
-    volumes:
-      - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
-      - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@poll-rabbit
-      - ./rabbitmq/logs:/var/log/rabbitmq/log
+  rabbit:
+    image: heidiks/rabbitmq-delayed-message-exchange:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
