@@ -16,14 +16,16 @@ import static com.ramonfernandes.pollapp.RabbitConfig.*;
 @Service
 public class PollService {
 
-    @Autowired
     private PollRepository pollRepository;
-
-    @Autowired
     private RabbitService rabbitService;
+    private VoteService voteService;
 
     @Autowired
-    private VoteService voteService;
+    public PollService(PollRepository pollRepository, RabbitService rabbitService, VoteService voteService) {
+        this.pollRepository = pollRepository;
+        this.rabbitService = rabbitService;
+        this.voteService = voteService;
+    }
 
     public Iterable<PollEntity> findAll() {
         return pollRepository.findAll();

@@ -3,7 +3,6 @@ package com.ramonfernandes.pollapp;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.ramonfernandes.pollapp.api.poll.PollMapper;
 import com.ramonfernandes.pollapp.api.vote.VoteMapper;
 import com.ramonfernandes.pollapp.domain.rabbit.RabbitService;
 import org.modelmapper.ModelMapper;
@@ -23,16 +22,6 @@ public class AppConfig {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
-    }
-
-    @Bean
-    public PollMapper pollMapper() {
-        return new PollMapper();
-    }
-
-    @Bean
-    public VoteMapper voteMapper() {
-        return new VoteMapper();
     }
 
     @Bean
