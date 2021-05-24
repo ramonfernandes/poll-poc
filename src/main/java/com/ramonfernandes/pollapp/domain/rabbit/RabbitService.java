@@ -3,10 +3,12 @@ package com.ramonfernandes.pollapp.domain.rabbit;
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashMap;
 
+@Service
 public class RabbitService {
 
     private Channel channel;

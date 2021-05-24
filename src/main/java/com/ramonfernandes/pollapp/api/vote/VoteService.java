@@ -3,6 +3,7 @@ package com.ramonfernandes.pollapp.api.vote;
 import com.ramonfernandes.pollapp.api.CpfValidator;
 import com.ramonfernandes.pollapp.api.InvalidCpfException;
 import com.ramonfernandes.pollapp.domain.poll.PollEntity;
+import com.ramonfernandes.pollapp.domain.poll.PollRepository;
 import com.ramonfernandes.pollapp.domain.poll.PollService;
 import com.ramonfernandes.pollapp.domain.rabbit.RabbitService;
 import com.ramonfernandes.pollapp.domain.vote.VoteEntity;
@@ -21,7 +22,7 @@ public class VoteService {
     private VoteRepository voteRepository;
 
     @Autowired
-    public PollService pollService;
+    public PollRepository pollRepository;
 
     public Iterable<VoteEntity> findAll() {
         return voteRepository.findAll();
@@ -32,7 +33,7 @@ public class VoteService {
     }
 
     public VoteEntity vote(VoteEntity entity) throws InvalidVoteException, ChangeSetPersister.NotFoundException, InvalidCpfException {
-        PollEntity pollEntity = pollService.findById(entity.getPollId());
+        PollEntity pollEntity = pollRepository.findById(entity.getPollId()).get();
         CpfValidator.validate(entity.getCpf());
         if (!voteRepository.existsByPollIdAndCpf(entity.getPollId(), entity.getCpf()) && pollEntity.is_open())
             save(entity);
