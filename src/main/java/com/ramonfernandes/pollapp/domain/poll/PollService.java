@@ -37,20 +37,15 @@ public class PollService {
     }
 
     public PollEntity createPoll(PollEntity pollEntity, Integer secondsToClose) {
-        pollRepository.save(pollEntity);
+        PollEntity savedEntity = pollRepository.save(pollEntity);
         rabbitService
                 .sendMessage(
                         POLL_EXCHANGE,
                         POLL_CLOSE_RK,
-                        pollEntity.getPollId().toString().getBytes(StandardCharsets.UTF_8),
+                        savedEntity.getPollId().toString().getBytes(StandardCharsets.UTF_8),
                         (secondsToClose * 1000));
 
-        return pollEntity;
-    }
-
-    public UUID delete(UUID pollId) {
-        pollRepository.deleteById(pollId);
-        return pollId;
+        return savedEntity;
     }
 
     public void closePoll(UUID pollId) {

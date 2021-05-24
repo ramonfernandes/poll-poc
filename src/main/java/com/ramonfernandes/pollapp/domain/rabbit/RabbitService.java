@@ -2,17 +2,20 @@ package com.ramonfernandes.pollapp.domain.rabbit;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.ramonfernandes.pollapp.domain.poll.PollConsumer;
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class RabbitService {
 
+    private Channel channel;
+
     @Autowired
-    public Channel channel;
+    public RabbitService(Channel channel) {
+        this.channel = channel;
+    }
+
 
     public void sendMessage(String exchange, String routingKey, byte[] body, Integer delay) {
         try {

@@ -3,7 +3,6 @@ package com.ramonfernandes.pollapp;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.ramonfernandes.pollapp.api.vote.VoteMapper;
 import com.ramonfernandes.pollapp.domain.rabbit.RabbitService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -43,11 +42,6 @@ public class AppConfig {
         channel.queueBind(NOTIFY_RESULT_QUEUE, POLL_EXCHANGE, NOTIFY_RESULT_RK);
 
         return channel;
-    }
-
-    @Bean
-    public RabbitService rabbitService() {
-        return new RabbitService();
     }
 
 }
